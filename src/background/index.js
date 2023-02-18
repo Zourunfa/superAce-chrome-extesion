@@ -1,40 +1,53 @@
 console.info('chrome-ext template-vue-js background script')
 
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+  const email = req.email
+  console.log(email)
+  let options = {
+    method: 'POST', //post请求
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
 
-chrome.contextMenus.create({
-  id: "wikid",
-  contexts: ["selection"],
-  title: "Search '%s' on Wikipedia",
-});
-
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-
-  if (info.menuItemId == "wikid") {
-    console.info(info,'----info')
-    console.log("Attempting to search for " + info.selectionText + "...");
-    const formattedWord = info.selectionText
-      .replace(/'/g, "%27")
-      .replace(/ /g, "_");
-    chrome.tabs.create({
-      url: "https://en.wikipedia.org/wiki/" + formattedWord,
-    });
-    console.log("Successfully searched for " + info.selectionText + "!");
+    body: JSON.stringify({
+      page: 1,
+      pageSize: 10,
+      email: 'sung@fastmail.com',
+    }),
   }
-});
+  fetch('https://admin.updf.cn/api/updf/user/getUserList', options)
+    .then((response) => response.text())
+    .then((text) => {
+      sendResponse(text)
+      // sendResponse({ frame: 'ok' })
+      console.log(text, '--text')
+      return true
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 
+  // sendResponse({ frame: 'ok' })
+  // // console.log(text, '--text')
+  return true
 
-console.info(chrome.webRequest,'---webRquest')
-chrome.webRequest.onCompleted.addListener(
-  function(details) {
-
-    console.log(details,'----detals')
-    const parsedUrl = new URL(details.url);
-
-    // if (currentUrl && currentUrl.indexOf(parsedUrl.pathname) > -1 && tabId) {
-    //   chrome.tabs.sendMessage(tabId, { type: MessageType.PAGE_RENDERED });
-    // }
-  },
-  { urls: ['*://*.github.com/*'] }
-);
-
-
+  // bg---->content
+  // chrome.tabs.query(
+  //   {
+  //     active: true,
+  //     currentWindow: true,
+  //   },
+  //   (tabs) => {
+  //     let message = {
+  //       //这里的内容就是发送至content-script的内容
+  //       info: '收到吗',
+  //     }
+  //     console.log(tabs, '---tab')
+  //     chrome.tabs.sendMessage(tabs[0].id, message, (res) => {
+  //       console.log('bg=>content')
+  //       console.log(res)
+  //     })
+  //   },
+  // )
+})

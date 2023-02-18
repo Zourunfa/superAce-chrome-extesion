@@ -15,7 +15,7 @@ export default defineManifest({
     default_icon: 'img/logo-48.png',
   },
   options_page: 'options.html',
-  devtools_page:'devtools.html',
+  devtools_page: 'devtools.html',
   background: {
     service_worker: 'src/background/index.js',
     type: 'module',
@@ -24,6 +24,7 @@ export default defineManifest({
     {
       matches: ['https://mail.google.com/*'],
       js: ['src/content/index.js'],
+      run_at: 'document_end',
     },
   ],
   web_accessible_resources: [
@@ -32,9 +33,5 @@ export default defineManifest({
       matches: [],
     },
   ],
-  permissions: [
-    "contextMenus",
-    "webRequest",
-    "<all_urls>"
-  ],
+  permissions: ['contextMenus', 'webRequest'],
 })
