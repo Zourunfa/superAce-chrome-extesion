@@ -20,12 +20,15 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [crx({ manifest }), vue(),  AutoImport({
-      resolvers: [ElementPlusResolver()],
-    }),
-    Components({
-      resolvers: [ElementPlusResolver()],
-    }),
-  ],
+    plugins: [
+      crx({ manifest }),
+      vue(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
+    ],
   }
 })

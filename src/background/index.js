@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     body: JSON.stringify({
       page: 1,
       pageSize: 10,
-      email: 'sung@fastmail.com',
+      email: email,
     }),
   }
   fetch('https://admin.updf.cn/api/updf/user/getUserList', options)
